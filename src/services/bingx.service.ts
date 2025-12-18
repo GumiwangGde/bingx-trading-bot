@@ -66,4 +66,22 @@ export class BingxService {
 
         return results;
     }
+
+    async batchCancelOrders(symbol: string, orderIds: string[]) {
+        const params = {
+            symbol: symbol,
+            orderIds: orderIds.join(','),
+        }
+
+        try {
+            console.log(`Starting batch cancel for ${orderIds.length} orders on ${symbol}...`);
+            const response = await this.makeRequest('POST', '/openApi/swap/v2/trade/batchCancel', params);
+            console.log("Batch Cancel Berhasil!");
+            return response.data;
+        } catch (error: any) {
+            console.error("Failed Batch Cancel:");
+            console.error(error.response?.data || error.message);
+            throw error;
+        }
+    }
 }
